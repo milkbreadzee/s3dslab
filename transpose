@@ -1,0 +1,66 @@
+#include <stdio.h>
+
+//fix  code.
+typedef struct
+{
+    int row;
+    int col;
+    int value;
+} terms;
+
+void fasttranspose(terms a[], terms b[]);
+
+int main()
+{
+    int size;
+    printf("Enter the number of non zero elements: ");
+    scanf("%d", &size);
+
+    terms m[size + 1], tm[size + 1];
+    m[0].value = size;
+
+    printf("Enter the number of rows and columns of the matrix: ");
+    scanf("%d %d", &m[0].row, &m[0].col);
+
+    printf("Enter the sparse terms representation (without first row): ");
+    for (int i = 1; i <= size; i++)
+        scanf("%d %d %d", &m[i].row, &m[i].col, &m[i].value);
+
+    printf("Sparse terms before transpose\n");
+    for (int i = 0; i <= size; i++)
+        printf("%d %d %d\n", m[i].row, m[i].col, m[i].value);
+
+    fasttranspose(m, tm);
+
+    printf("Sparse matrix after transpose\n");
+    for (int i = 0; i <= size; i++)
+        printf("%d %d %d\n", tm[i].row, tm[i].col, tm[i].value);
+}
+
+void fasttranspose(terms a[], terms b[])
+{
+    int n = a[0].value;
+    b[0].row = a[0].col;
+    b[0].col = a[0].row;
+    b[0].value = a[0].value;
+
+    int startingpos = 1;
+    if (n > 0)
+    {
+        startingpos = 1;
+        for (int i = 0; i < a[0].col; i++)
+        {
+            for (int j = 0; j <= n; j++)
+            {
+                if (a[j].col == i)
+                {
+                    b[startingpos].row = a[j].col;
+                    b[startingpos].col = a[j].row;
+                    b[startingpos].value = a[j].value;
+                    startingpos++;
+                }
+            }
+        }
+    }
+}
+
